@@ -7,61 +7,75 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="container">
-            <h1 class="logo">Jack Wittmayer</h1>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#contact">Contact</a></li>
+    <div class="container">
+        <nav class="navbar">
+            <h1><a href="/">Jack Wittmayer</a></h1>
+            <ul>
+                <li><a href="/about.html">About</a></li>
             </ul>
-        </div>
-    </nav>
+        </nav>
 
-    <header id="home" class="hero">
-        <div class="container">
-            <h1>Welcome to My Website</h1>
-            <p>Software Engineer | Developer | Builder</p>
-        </div>
-    </header>
+        <main>
+            <section class="bio">
+                <p>Hi, I'm Jack Wittmayer. I'm a software engineer interested in AI, machine learning, and building useful tools. This is where I share my thoughts and projects.</p>
+            </section>
 
-    <section id="about" class="about">
-        <div class="container">
-            <h2>About Me</h2>
-            <p>Hi! I'm Jack Wittmayer. This is my personal website where I share my projects and thoughts on technology.</p>
-        </div>
-    </section>
+            <section class="latest-post">
+                <h2>Latest Post</h2>
+                <div id="latest-post-container"></div>
+            </section>
 
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2>Projects</h2>
-            <div class="project-grid">
-                <div class="project-card">
-                    <h3>Project One</h3>
-                    <p>Description of your first project goes here.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
-                <div class="project-card">
-                    <h3>Project Two</h3>
-                    <p>Description of your second project goes here.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
-                <div class="project-card">
-                    <h3>Project Three</h3>
-                    <p>Description of your third project goes here.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </section>
+            <section class="posts">
+                <h2>All Posts</h2>
+                <div id="posts-list-container"></div>
+            </section>
 
-    <footer id="contact" class="footer">
-        <div class="container">
-            <h2>Get in Touch</h2>
-            <p>Email: <a href="mailto:jack@example.com">jack@example.com</a></p>
-            <p>&copy; 2025 Jack Wittmayer. All rights reserved.</p>
-        </div>
-    </footer>
+            <script>
+                // Load posts from posts.json and render them dynamically
+                async function loadPosts() {
+                    try {
+                        const response = await fetch('/posts.json');
+                        if (!response.ok) throw new Error('Failed to load posts');
+                        const posts = await response.json();
+
+                        if (posts.length === 0) return;
+
+                        // Render latest post
+                        const latestPost = posts[0];
+                        const latestContainer = document.getElementById('latest-post-container');
+                        latestContainer.innerHTML = `
+                            <article class="post">
+                                <h3><a href="/posts/${latestPost.slug}.html">${latestPost.title}</a></h3>
+                                <p class="post-date">${latestPost.date}</p>
+                                <p>${latestPost.description}</p>
+                                <a href="/posts/${latestPost.slug}.html" class="read-more">Read more →</a>
+                            </article>
+                        `;
+
+                        // Render all posts list
+                        const postsContainer = document.getElementById('posts-list-container');
+                        const postsHtml = posts.map(post => `
+                            <li>
+                                <a href="/posts/${post.slug}.html">${post.title}</a>
+                                <span class="post-list-date">${post.date}</span>
+                            </li>
+                        `).join('');
+                        postsContainer.innerHTML = `<ul class="posts-list">${postsHtml}</ul>`;
+                    } catch (error) {
+                        console.error('Error loading posts:', error);
+                        document.getElementById('latest-post-container').innerHTML = '<p>Unable to load posts.</p>';
+                        document.getElementById('posts-list-container').innerHTML = '<p>Unable to load posts.</p>';
+                    }
+                }
+
+                // Load posts when the page loads
+                document.addEventListener('DOMContentLoaded', loadPosts);
+            </script>
+        </main>
+
+        <footer>
+            <p>© 2025 Jack Wittmayer</p>
+        </footer>
+    </div>
 </body>
 </html>
