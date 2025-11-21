@@ -1,0 +1,15 @@
+title: Jack Wittmayer
+description: Personal website and portfolio
+author: Jack Wittmayer
+url: https://JackWittmayer.github.io
+
+# Jekyll configuration
+theme: jekyll-theme-minimal
+markdown: kramdown
+
+# Exclude files
+exclude:
+  - .git
+  - .gitignore
+  - README.md
+  - node_modules
